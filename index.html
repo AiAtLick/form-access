@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Verify @lwhs.org Access</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      function handleCredentialResponse(response) {
+        const decoded = parseJwt(response.credential);
+        const email = decoded.email;
+
+        if (email.endsWith("@lwhs.org")) {
+          window.location.href = "https://tally.so/r/wAGMge"; // Redirect to Tally Form 1
+        } else {
+          alert("You must use an @lwhs.org email address to access this form.");
+        }
+      }
+
+      function parseJwt(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64).split('').map(c => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join('')
+        );
+        return JSON.parse(jsonPayload);
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Sign in with your @lwhs.org Google account</h2>
+    <div id="g_id_onload"
+         data-client_id="828507481251-loh168psu4gqp76i6fai89dp9ral23eh.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-ux_mode="popup"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+  </body>
+</html>
